@@ -38,7 +38,7 @@ class Labelproject(object):
     def get_labelclasses(self):
         return self.labelclasses
 
-    def get_labelfiles(self, sorting="created_at", tab="all", count=10, desc=False, searching="", workAssignee=None):
+    def get_labelfiles(self, sorting="created_at", tab="all", count=10, desc=False, searching="", work_assignee=None):
         labelfiles_raw = req.get(f"{self.url}/listobjects/", params={
                                                                     "token": self.user_token,
                                                                     "labelprojectId": self.id,
@@ -47,7 +47,7 @@ class Labelproject(object):
                                                                     "count": count,
                                                                     "desc": desc,
                                                                     "searching": searching,
-                                                                    "workAssignee": workAssignee,
+                                                                    "workAssignee": work_assignee,
                                                                      }).json()
         labelfiles = []
         for label_raw in labelfiles_raw.get('file',[]):
@@ -179,17 +179,17 @@ class Labelfile(object):
 
         return file_path
 
-    def set_done(self, workAssignee=None):
+    def set_done(self, work_assignee=None):
         self.status = "done"
-        return self.set_status("done", workAssignee=workAssignee)
+        return self.set_status("done", work_assignee=work_assignee)
 
-    def set_status(self, status, workAssignee=None):
+    def set_status(self, status, work_assignee=None):
         self.status = status
         return req.put(f"{self.url}/sthreefiles/{self.id}/",
                  params={"token": self.user_token},
                  data=json.dumps({
                      'status': status,
-                     'workAssignee': workAssignee,
+                     'workAssignee': work_assignee,
                  })).json()
 
     def create_label(self, label, class_name=None, color=None, box=[], polygon=[], structuredData=None):
