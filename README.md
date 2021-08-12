@@ -47,7 +47,7 @@ Then you can use all functions in [SDK guide](https://docs.ds2.ai/sdk_00_readme/
 
 ---
 
-## **Top 5 Features of [DS2.ai](https://ds2.ai/) SDK **
+## **Top 5 Features of [DS2.ai](https://ds2.ai/) SDK**
 
 
 The SDK is composed of 16 classes. Class DS2 provides python functions that are more generally used for AI development, whereas the others provide specific functions for each detailed steps in AI development.  
