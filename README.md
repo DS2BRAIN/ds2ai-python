@@ -9,7 +9,7 @@ The Software Development Kit (SDK) consists of python functions that allow you t
 ​
 ![Screen_Shot_2021-07-01_at_3 37 53_PM](https://user-images.githubusercontent.com/72846894/124224623-fcc39c80-db40-11eb-9737-2e384d88c300.png)
 ​
-## Installation
+## **Installation**
 ​
 ​
 Install via pip:
@@ -19,7 +19,7 @@ $ pip install ds2ai
 ```
 ​
 ​
-## Getting started
+## **Getting started**
 ​
 ​
 ### 1. Getting your own token
@@ -32,9 +32,9 @@ To use the SDK, you need to get a token, and you can check the token by register
 ​
 ### 2. Activate
 ​
-To use SDK function code, you have to activate your code, first.
+To use SDK function code, you have to activate your code, first.  
 ​
-Run the below code with your own app token. 
+Run the below code with your own app token.   
 ​
 ```python
 import ds2ai
@@ -42,19 +42,29 @@ import ds2ai
 ds2 = ds2ai.DS2(token)
 ```
 ​
-Then you can use all functions in [SDK guide](https://docs.ds2.ai/sdk_00_readme/)
+Then you can use all functions in [SDK guide](https://docs.ds2.ai/sdk_00_readme/).
 ​
 ---
 ​
-## Top 5 Features of [DS2.ai](https://ds2.ai/) SDK 
+## **Top 5 Features of [DS2.ai](https://ds2.ai/) SDK **
 ​
 ​
-The SDK is composed of 16 classes. Class DS2 provides python functions that are more generally used for AI development, whereas the others provide specific functions for each detailed steps in AI development.
+The SDK is composed of 16 classes. Class DS2 provides python functions that are more generally used for AI development, whereas the others provide specific functions for each detailed steps in AI development.  
 ​
-Here, we want to explain to you examples of using **Top5 function codes that are usable and easy to use.** 
+Here, we want to explain to you examples of using **Top5 function codes that are usable and easy to use.**   
 ​
+### 1. Getting magic code
 ​
-### 1. Auto Labeling
+```python
+ds2.get_magic_code(training_method, data_file, value_for_predict)
+```
+​
+This function returns a the magic code for setting variable values with optimal combinations for AI training. As with the three functions above, it takes the data_file, training_method, value_for_predict as input so that after running the function, a magic code with the whole process of AI training is returned. 
+​
+<img width="2800" src="https://user-images.githubusercontent.com/72846894/129133237-3c5d99b1-fc08-49ad-a529-bfe2e69c1862.gif"/>   
+<br>
+​
+### 2. Auto Labeling
 ​
 ```python
 ds2.start_auto_labeling(data_file, amount, has_label_data=False, predict_column_name=None, frame=60,
@@ -64,43 +74,29 @@ ds2.start_auto_labeling(data_file, amount, has_label_data=False, predict_column_
                           )
                           
 ```
-
 This function executes auto-labeling immediately from loading data file without using dataconnector. The major parameters include data_file to auto-label, whether the data includes labeled data for a certain part of the dataset, and the type of auto-labeling, such as “box”, which will label using bounding boxes.
 ​
-<img width="2800" src="https://user-images.githubusercontent.com/72846894/125561952-79a2e8f8-4f3f-4def-bdca-848b6d19e423.gif"/>
+<img width="2800" src="https://user-images.githubusercontent.com/72846894/129134164-365e6138-5b33-4747-bfe0-e3107d66dd59.gif"/>
 <br>
 ​
-### 2. AI Training
+### 3. AI Training
 ​
 ```python
 ds2.train(data_file, training_method, value_for_predict, option="accuracy", frame=60)
 ```
-
 This function executes development of AI from CLICK AI in DS2.ai’s console immediately from loading data file without using dataconnector. According to what parameters you use when calling the function, such as data_file, training_method, value_for_predict, and option, it will generate your customized AI models.  
 ​
 <img width="2800" src="https://user-images.githubusercontent.com/72846894/125380537-4c218c80-e3cd-11eb-85e7-cb8686f2cf7b.gif"/>
 <br>
 ​
-### 3. Deploy your AI model
+### 4. Deploy your AI model
 ​
 ```python
 ds2.deploy(model_file, name=None, cloud_type="AWS", region="us-west-1", server_type="g4dn.xlarge")
 ```
-
 This function deploys AI models to cloud servers with specifications under the desired hosting region. The type of the cloud server is set to “AWS” as default, but keep in mind that it also supports other cloud services such as Google Cloud. For the use of servers other than AWS, please visit our website and contact our team.
   
 <img width="2800" src="https://user-images.githubusercontent.com/72846894/125379607-c7823e80-e3cb-11eb-85ce-c0cd35cfa588.gif"/>   
-<br>
-​
-### 4. Getting magic code
-​
-```python
-ds2.get_magic_code(training_method, data_file, value_for_predict)
-```
-
-This function returns a the magic code for setting variable values with optimal combinations for AI training. As with the three functions above, it takes the data_file, training_method, value_for_predict as input so that after running the function, a magic code with the whole process of AI training is returned. 
-​
-<img width="2800" src="https://user-images.githubusercontent.com/72846894/125379392-68242e80-e3cb-11eb-858b-bd005085a501.gif"/>   
 <br>
 ​
 ### 5. Rent AI training server
@@ -108,7 +104,6 @@ This function returns a the magic code for setting variable values with optimal 
 ```python
 ds2.rent_custom_training_server(cloud_type="AWS", region="us-west-1", server_type="g4dn.xlarge", name=None)
 ```
-
 This function rents an inference training server in preferred cloud environment for Custom training of Click AI. The type of the cloud server is set to “AWS” as default, but keep in mind that it also supports other cloud services such as Google Cloud. For the use of servers other than AWS, please visit our website and contact our team.  
 ​
 <img width="2800" src="https://user-images.githubusercontent.com/72846894/125380727-9efb4400-e3cd-11eb-824b-676d670941b5.gif"/>   
