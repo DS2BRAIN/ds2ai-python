@@ -62,7 +62,7 @@ ds2.get_magic_code(training_method, data_file, value_for_predict)
 
 This function returns a the magic code for setting variable values with optimal combinations for AI training. As with the three functions above, it takes the data_file, training_method, value_for_predict as input so that after running the function, a magic code with the whole process of AI training is returned. 
 
-<img width="2800" src="https://user-images.githubusercontent.com/72846894/129133237-3c5d99b1-fc08-49ad-a529-bfe2e69c1862.gif"/>   
+<img width="2800" src="https://user-images.githubusercontent.com/72846894/129141964-fbc17082-64d5-4d13-b56c-6682dbbd50e4.gif"/>   
 <br>
 
 ### 2. Auto Labeling
@@ -77,7 +77,7 @@ ds2.start_auto_labeling(data_file, amount, has_label_data=False, predict_column_
 ```
 This function executes auto-labeling immediately from loading data file without using dataconnector. The major parameters include data_file to auto-label, whether the data includes labeled data for a certain part of the dataset, and the type of auto-labeling, such as “box”, which will label using bounding boxes.
 
-<img width="2800" src="https://user-images.githubusercontent.com/72846894/129134164-365e6138-5b33-4747-bfe0-e3107d66dd59.gif"/>
+<img width="2800" src="https://user-images.githubusercontent.com/72846894/125561952-79a2e8f8-4f3f-4def-bdca-848b6d19e423.gif"/>
 <br>
 
 ### 3. AI Training
