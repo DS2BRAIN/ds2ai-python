@@ -135,12 +135,12 @@ class Model(object):
             "userId": self.user.id,
         }
         predict_url = {
-            "predict": f"{self.url}/{self.user.id}/predict/",
-            "predictimagebyurl": f"{self.url}/{self.user.id}/predictimagebyurl/",
-            "predictimagebyurlinfo": f"{self.url}/{self.user.id}/predictimagebyurlinfo/",
-            "predictall": f"{self.url}/{self.user.id}/predictall/",
-            "predictimage": f"{self.url}/{self.user.id}/predictimage/",
-            "predictimageinfo": f"{self.url}/{self.user.id}/predictimageinfo/",
+            "predict": f"{self.url}/predict/{self.user.id}/",
+            "predictimagebyurl": f"{self.url}/predictimagebyurl/{self.user.id}/",
+            "predictimagebyurlinfo": f"{self.url}/predictimagebyurlinfo/{self.user.id}/",
+            "predictall": f"{self.url}/predictall/{self.user.id}/",
+            "predictimage": f"{self.url}/predictimage/{self.user.id}/",
+            "predictimageinfo": f"{self.url}/predictimageinfo/{self.user.id}/",
         }
 
         if type(data) == dict:
