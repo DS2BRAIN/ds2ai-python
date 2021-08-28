@@ -8,12 +8,12 @@ import json
 
 class Project(object):
 
-    def __init__(self, info, user):
+    def __init__(self, info, user, url=None):
         if not isinstance(info, dict):
             raise Exception(str(info))
         if info.get('error'):
             raise Exception(info['message_en'])
-        self.url = Util().url
+        self.url = url if url else Util().url
         self.__dict__.update(info)
         self.user = user
         self.user_token = self.user.token
@@ -23,7 +23,7 @@ class Project(object):
         if isinstance(self.dataconnectorsList[0], int):
             main_dataconnector = self.get_dataconnector(self.dataconnectorsList[0])
         else:
-            main_dataconnector = Dataconnector(self.dataconnectorsList[0], self.user)
+            main_dataconnector = Dataconnector(self.dataconnectorsList[0], self.user, url=self.url)
         models = []
         for model in info.get("models", []):
             models.append(Model(model, user, project=self, main_dataconnector=main_dataconnector))
@@ -37,11 +37,11 @@ class Project(object):
 
     def get_dataconnector(self, dataconnector_id):
         return Dataconnector(req.get(f"{self.url}/dataconnectors/{dataconnector_id}/",
-                                     params={"token": self.user_token}).json(), self.user)
+                                     params={"token": self.user_token}).json(), self.user, url=self.url)
 
     def refresh(self):
         return Project(req.get(f"{self.url}/projects/{self.id}/",
-                                 params={"token": self.user_token}).json(), self.user)
+                                 params={"token": self.user_token}).json(), self.user, url=self.url)
 
     def delete(self):
         req.delete(f"{self.url}/projects/{self.id}/",params={"token": self.user_token})
@@ -57,7 +57,7 @@ class Project(object):
                                 'trainingMethod': training_method,
                                 'valueForPredict': value_for_predict,
                                 'option': option,
-                            })).json(), self.user)
+                            })).json(), self.user, url=self.url)
 
     def stop(self):
 
@@ -68,7 +68,7 @@ class Project(object):
                 data=json.dumps({
                                  "status": 0,
                                  "statusText": "stopped",
-                                 })).json(), self.user)
+                                 })).json(), self.user, url=self.url)
 
     def get_magic_code(self, training_method, value_for_predict, file_path="output.ipynb"):
 
@@ -92,7 +92,7 @@ class Project(object):
 class Model(object):
     utilClass = Util()
 
-    def __init__(self, info, user, project=None, main_dataconnector=None):
+    def __init__(self, info, user, project=None, main_dataconnector=None, url=None):
         if not isinstance(info, dict):
             raise Exception(str(info))
         if info.get('error'):
@@ -100,7 +100,7 @@ class Model(object):
         self.__dict__.update(info)
         self.id = info['id']
         self.token = info['token']
-        self.url = self.utilClass.url
+        self.url = url if url else Util().url
         self.user = user
         self.user_token = self.user.token
         if info.get('trainingMethod'):
@@ -111,17 +111,17 @@ class Model(object):
         if not project:
             self.project = self.get_project(info['project'])
         if not main_dataconnector:
-            self.main_dataconnector = Dataconnector(self.project.dataconnectorsList[0], self.user)
+            self.main_dataconnector = Dataconnector(self.project.dataconnectorsList[0], self.user, url=self.url)
 
     def __repr__(self):
         return str(self.id)
 
     def get_project(self, project_id):
-        return Project(req.get(f"{self.url}/projects/{project_id}/", params={"token": self.user_token}).json(), self.user)
+        return Project(req.get(f"{self.url}/projects/{project_id}/", params={"token": self.user_token}).json(), self.user, url=self.url)
 
     def get_dataconnector(self, dataconnector_id):
         return Dataconnector(req.get(f"{self.url}/dataconnectors/{dataconnector_id}/",
-                                     params={"token": self.user_token}).json(), self.user)
+                                     params={"token": self.user_token}).json(), self.user, url=self.url)
 
     def predict(self, data, return_type="info"):
 
@@ -179,18 +179,18 @@ class Model(object):
                                           'region': region,
                                           'serverType': server_type,
                                           'modelId': self.id,
-                                          })).json(), self.user)
+                                          })).json(), self.user, url=self.url)
 
 
 class Jupyterproject(object):
-    def __init__(self, info, user):
+    def __init__(self, info, user, url=None):
         if not isinstance(info, dict):
             raise Exception(str(info))
         if info.get('error'):
             raise Exception(info['message_en'])
         self.__dict__.update(info)
         self.id = info['id']
-        self.url = Util().url
+        self.url = url if url else Util().url
         self.user = user
         self.user_token = self.user.token
         jupyterservers = []
@@ -216,7 +216,7 @@ class Jupyterproject(object):
                      'jupyterProjectId': self.id,
                      'serverType': server_type,
                      'region': region,
-                 })).json(), self.user)
+                 })).json(), self.user, url=self.url)
 
     def get_server_status(self):
         return req.get(f"{self.url}/jupyter-servers-status/",
@@ -227,21 +227,21 @@ class Jupyterproject(object):
 
     def refresh(self):
         return Jupyterproject(req.get(f"{self.url}/jupyterprojects/{self.id}/",
-                                 params={"token": self.user_token}).json(), self.user)
+                                 params={"token": self.user_token}).json(), self.user, url=self.url)
 
     def delete(self):
         req.delete(f"{self.url}/jupyterprojects/{self.id}/",params={"token": self.user_token})
 
 
 class Jupyterserver(object):
-    def __init__(self, info, user):
+    def __init__(self, info, user, url=None):
         if not isinstance(info, dict):
             raise Exception(str(info))
         if info.get('error'):
             raise Exception(info['message_en'])
         self.__dict__.update(info)
         self.instanceId = info['instanceId']
-        self.url = Util().url
+        self.url = url if url else Util().url
         self.user = user
         self.user_token = self.user.token
 

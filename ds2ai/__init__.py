@@ -25,9 +25,9 @@ import json
 
 class DS2():
 
-    def __init__(self, apptoken):
+    def __init__(self, apptoken, url=None):
         self.utilClass = Util()
-        self.url = self.utilClass.url
+        self.url = url if url else self.utilClass.url
         self.apptoken = apptoken
         self.user = self.get_user_info()
         self.user_token = self.user.token
@@ -52,7 +52,7 @@ class DS2():
                                     data=json.dumps({
                                           'dataconnectors': [dataconnector_id],
                                           'trainingMethod': training_method
-                                          })).json(), self.user)
+                                          })).json(), self.user, url=self.url)
 
     def load_model(self, model_file):
 
@@ -61,21 +61,21 @@ class DS2():
             return Project(req.post(f"{self.url}/projectswithmodelfile/",
                                     params={"token": self.user_token}, files={'file': file_content},
                                     data={'filename': model_file.split("/")[-1] if "/" in model_file else model_file},
-                                    stream=True).json(), self.user)
+                                    stream=True).json(), self.user, url=self.url)
 
     def get_projects(self, count=25, start=1, desc=True):
         items = []
         items_raw = req.get(f"{self.url}/projects/",
                 params={"token": self.user_token, "start": start, "page": count, "desc": desc}).json()['projects']
         for item_raw in items_raw:
-            items.append(Project(item_raw, self.user))
+            items.append(Project(item_raw, self.user, url=self.url))
         return items
 
     def get_project(self, project_id):
-        return Project(req.get(f"{self.url}/projects/{project_id}/", params={"token": self.user_token}).json(), self.user)
+        return Project(req.get(f"{self.url}/projects/{project_id}/", params={"token": self.user_token}).json(), self.user, url=self.url)
 
     def get_model(self, model_id):
-        return Model(req.get(f"{self.url}/models/{model_id}/", params={"token": self.user_token}).json(), self.user)
+        return Model(req.get(f"{self.url}/models/{model_id}/", params={"token": self.user_token}).json(), self.user, url=self.url)
 
     def get_quick_models(self, count=25, start=1, desc=True):
         items = []
@@ -88,7 +88,7 @@ class DS2():
 
     def get_quick_model_by_slug_name(self, slug_name):
         return MarketModel(req.get(f"{self.url}/marketmodels/slug/{slug_name}/",
-                                   params={"token": self.user_token}).json(), self.user)
+                                   params={"token": self.user_token}).json(), self.user, url=self.url)
 
     def create_dataconnector(self, data_file, has_label_data=False, predict_column_name=None, frame=60):
         with open(data_file, "rb") as f:
@@ -101,19 +101,19 @@ class DS2():
                                           'hasLabelData': has_label_data,
                                           'predictColumnName': predict_column_name,
                                           'frameValue': frame,
-                                          }, stream=True).json(), self.user)
+                                          }, stream=True).json(), self.user, url=self.url)
 
     def get_dataconnectors(self, count=25, start=1, desc=True):
         items = []
         items_raw = req.get(f"{self.url}/dataconnectors/",
                 params={"token": self.user_token, "start": start, "page": count, "desc": desc}).json()['dataconnectors']
         for item_raw in items_raw:
-            items.append(Dataconnector(item_raw, self.user))
+            items.append(Dataconnector(item_raw, self.user, url=self.url))
         return items
 
     def get_dataconnector(self, dataconnector_id):
         return Dataconnector(req.get(f"{self.url}/dataconnectors/{dataconnector_id}/",
-                                     params={"token": self.user_token}).json(), self.user)
+                                     params={"token": self.user_token}).json(), self.user, url=self.url)
 
     def create_labelproject(self, data_file=None, dataconnector=None, dataconnectors=None,
                             training_method=None, name=None, frame=60):
@@ -140,7 +140,7 @@ class DS2():
                                           'workapp': training_method,
                                           'name': name,
                                           'frame_value': frame,
-                                          })).json(), self.user)
+                                          })).json(), self.user, url=self.url)
 
         elif data_file:
             if not name:
@@ -154,7 +154,7 @@ class DS2():
                                           'workapp': training_method,
                                           'frame_value': frame,
                                           'name': name,
-                                          }, stream=True).json()['labelproject'], self.user)
+                                          }, stream=True).json()['labelproject'], self.user, url=self.url)
 
 
         else:
@@ -165,36 +165,36 @@ class DS2():
         items_raw = req.get(f"{self.url}/labelprojects/",
                 params={"token": self.user_token, "start": start, "page": count, "desc": desc}).json()['projects']
         for item_raw in items_raw:
-            items.append(Labelproject(item_raw, self.user))
+            items.append(Labelproject(item_raw, self.user, url=self.url))
         return items
 
     def get_labelproject(self, labelproject_id):
         return Labelproject(req.get(f"{self.url}/labelprojects/{labelproject_id}/",
-                                     params={"token": self.user_token}).json(), self.user)
+                                     params={"token": self.user_token}).json(), self.user, url=self.url)
 
     def get_opsprojects(self, count=25, start=1, desc=True):
         items = []
         items_raw = req.get(f"{self.url}/opsprojects/",
                 params={"token": self.user_token, "start": start, "page": count, "desc": desc}).json()['projects']
         for item_raw in items_raw:
-            items.append(Opsproject(item_raw, self.user))
+            items.append(Opsproject(item_raw, self.user, url=self.url))
         return items
 
     def get_opsproject(self, opsproject_id):
         return Opsproject(req.get(f"{self.url}/opsprojects/{opsproject_id}/",
-                                     params={"token": self.user_token}).json(), self.user)
+                                     params={"token": self.user_token}).json(), self.user, url=self.url)
 
     def get_jupyterprojects(self, count=25, start=1, desc=True):
         items = []
         items_raw = req.get(f"{self.url}/jupyterprojects/",
                 params={"token": self.user_token, "start": start, "page": count, "desc": desc}).json()['projects']
         for item_raw in items_raw:
-            items.append(Jupyterproject(item_raw, self.user))
+            items.append(Jupyterproject(item_raw, self.user, url=self.url))
         return items
 
     def get_jupyterproject(self, jupyterproject_id):
         return Jupyterproject(req.get(f"{self.url}/jupyterprojects/{jupyterproject_id}/",
-                                     params={"token": self.user_token}).json(), self.user)
+                                     params={"token": self.user_token}).json(), self.user, url=self.url)
 
     def get_asynctasks(self, count=25, start=1, desc=True, tasktype="all"):
         items = []
@@ -202,12 +202,12 @@ class DS2():
                 params={"token": self.user_token, "start": start, "page": count, "desc": desc,
                         "tasktype": tasktype}).json()
         for item_raw in items_raw['asynctasks']:
-            items.append(Asynctask(item_raw, self.user))
+            items.append(Asynctask(item_raw, self.user, url=self.url))
         return items
 
     def get_asynctask(self, asynctask_id):
         return Asynctask(req.get(f"{self.url}/asynctasks/{asynctask_id}/",
-                                     params={"token": self.user_token}).json(), self.user)
+                                     params={"token": self.user_token}).json(), self.user, url=self.url)
 
     def start_auto_labeling(self, data_file, amount, has_label_data=False, predict_column_name=None, frame=60,
                           ai_type="general", autolabeling_type="box", general_ai_type="person",
@@ -248,7 +248,7 @@ class DS2():
                                       'labeling_class': labeling_class,
                                       'name': name,
                                       'description': description,
-                                      })).json(), self.user)
+                                      })).json(), self.user, url=self.url)
 
 
     def train(self, data_file, training_method, value_for_predict, option="accuracy", frame=60):
@@ -274,7 +274,7 @@ class DS2():
                                   'dataconnector': dataconnector.id,
                                   'option': option,
                                   'frameValue': frame,
-                                  })).json(), self.user)
+                                  })).json(), self.user, url=self.url)
 
     def deploy(self, model_file, name=None, cloud_type="AWS", region="us-west-1", server_type="g4dn.xlarge"):
 
@@ -294,7 +294,7 @@ class DS2():
                                       'projectName': name,
                                       'serverType': server_type,
                                       'region': region,
-                                      }, stream=True).json(), self.user)
+                                      }, stream=True).json(), self.user, url=self.url)
 
     def get_magic_code(self, training_method, data_file, value_for_predict):
 
@@ -330,7 +330,7 @@ class DS2():
                                           'projectName': name,
                                           'region': region,
                                           'serverType': server_type,
-                                          })).json(), self.user)
+                                          })).json(), self.user, url=self.url)
 
     def predict(self, data, model_id=None, quick_model_name="", return_type="info"):
 

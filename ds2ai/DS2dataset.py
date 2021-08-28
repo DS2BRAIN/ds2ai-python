@@ -4,7 +4,7 @@ import requests as req
 
 
 class Dataconnector(object):
-    def __init__(self, info, user):
+    def __init__(self, info, user, url):
         if not isinstance(info, dict):
             raise Exception(str(info))
         if info.get('error'):
@@ -12,7 +12,7 @@ class Dataconnector(object):
         self.__dict__.update(info)
         self.id = info['id']
         self.name = info['dataconnectorName']
-        self.url = Util().url
+        self.url = url if url else Util().url
         self.user = user
         self.status = info['status']
         self.user_token = self.user.token

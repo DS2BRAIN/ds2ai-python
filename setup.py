@@ -21,7 +21,7 @@
 
 from setuptools import setup
 setup(name="ds2ai",
-      version='1.0.2',
+      version='1.0.4',
       description="MLOps Platform - DS2.AI Python SDK",
       packages=["ds2ai"],
       author="DSLAB GLOBAL, INC",

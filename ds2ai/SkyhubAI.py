@@ -6,14 +6,14 @@ import json
 class Opsproject(object):
     utilClass = Util()
 
-    def __init__(self, info, user):
+    def __init__(self, info, user, url=None):
         if not isinstance(info, dict):
             raise Exception(str(info))
         if info.get('error'):
             raise Exception(info['message_en'])
         self.__dict__.update(info)
         self.id = info['id']
-        self.url = self.utilClass.url
+        self.url = url if url else Util().url
         if info.get('model'):
             self.opsModel = Opsmodel(info['model'], user)
             self.token = self.opsModel.token
@@ -32,7 +32,7 @@ class Opsproject(object):
         if isinstance(self.dataconnectorsList[0], int):
             self.main_dataconnector = self.get_dataconnector(self.dataconnectorsList[0])
         else:
-            self.main_dataconnector = Dataconnector(self.dataconnectorsList[0], self.user)
+            self.main_dataconnector = Dataconnector(self.dataconnectorsList[0], self.user, url=self.url)
 
     def __repr__(self):
         return str(self.id)
@@ -52,7 +52,7 @@ class Opsproject(object):
 
     def refresh(self):
         return Opsproject(req.get(f"{self.url}/opsprojects/{self.id}/",
-                                 params={"token": self.user_token}).json(), self.user)
+                                 params={"token": self.user_token}).json(), self.user, url=self.url)
 
     def predict(self, data, return_type="info"):
 
@@ -89,12 +89,12 @@ class Opsproject(object):
 
     def get_dataconnector(self, dataconnector_id):
         return Dataconnector(req.get(f"{self.url}/dataconnectors/{dataconnector_id}/",
-                                     params={"token": self.user_token}).json(), self.user)
+                                     params={"token": self.user_token}).json(), self.user, url=self.url)
 
 class Opsmodel(object):
     utilClass = Util()
 
-    def __init__(self, info, user):
+    def __init__(self, info, user, url=None):
         if not isinstance(info, dict):
             raise Exception(str(info))
         if info.get('error'):
@@ -102,7 +102,7 @@ class Opsmodel(object):
         self.__dict__.update(info)
         self.id = info['id']
         self.token = info['token']
-        self.url = self.utilClass.url
+        self.url = url if url else Util().url
         self.user = user
         self.user_token = self.user.token
 
@@ -110,14 +110,14 @@ class Opsmodel(object):
         return str(self.id)
 
 class Opsservergroup(object):
-    def __init__(self, info, user):
+    def __init__(self, info, user, url=None):
         if not isinstance(info, dict):
             raise Exception(str(info))
         if info.get('error'):
             raise Exception(info['message_en'])
         self.__dict__.update(info)
         self.id = info['id']
-        self.url = Util().url
+        self.url = url if url else Util().url
         self.user = user
         self.user_token = self.user.token
 

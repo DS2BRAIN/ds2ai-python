@@ -4,7 +4,7 @@ import json
 
 
 class Labelproject(object):
-    def __init__(self, info, user):
+    def __init__(self, info, user, url=None):
         if not isinstance(info, dict):
             raise Exception(str(info))
         if info.get('error'):
@@ -12,7 +12,7 @@ class Labelproject(object):
         self.__dict__.update(info)
         self.id = info['id']
         self.workapp = info['workapp']
-        self.url = Util().url
+        self.url = url if url else Util().url
         self.user = user
         self.user_token = self.user.token
         labelclasses = []
@@ -31,7 +31,7 @@ class Labelproject(object):
         labels_raw = req.get(f"{self.url}/labels-by-labelproject/{self.id}/", params={"token": self.user_token}).json()
         labels = []
         for label_raw in labels_raw:
-            labels.append(Label(label_raw, self.user))
+            labels.append(Label(label_raw, self.user, url=self.url))
 
         return labels
 
@@ -51,7 +51,7 @@ class Labelproject(object):
                                                                      }).json()
         labelfiles = []
         for label_raw in labelfiles_raw.get('file',[]):
-            labelfiles.append(Labelfile(label_raw, self.user, self.labelclasses))
+            labelfiles.append(Labelfile(label_raw, self.user, self.labelclasses, url=self.url))
 
         return labelfiles
 
@@ -66,7 +66,7 @@ class Labelproject(object):
                                           'name': name,
                                           'labelproject': self.id,
                                           'color': color
-                                          })).json(), self.user)
+                                          })).json(), self.user, url=self.url)
 
     def create_labelfile(self, data_file):
         return req.post(f"{self.url}/add-object/", files={'files': open(data_file, "rb")}, data={
@@ -139,15 +139,15 @@ class Labelproject(object):
         if self.workapp in ['object_detection', 'image']:
             return Asynctask(req.post(f"{self.url}/export-coco/{self.id}/",
                             params={"token": self.user_token, 'is_get_image': is_get_image},
-                            ).json(), self.user)
+                            ).json(), self.user, url=self.url)
         else:
             return Asynctask(req.post(f"{self.url}/export-data/{self.id}/",
                            params={"token": self.user_token},
-                           ).json(), self.user)
+                           ).json(), self.user, url=self.url)
 
 
 class Labelfile(object):
-    def __init__(self, info, user, label_classes):
+    def __init__(self, info, user, label_classes, url=None):
         if not isinstance(info, dict):
             raise Exception(str(info))
         if info.get('error'):
@@ -161,7 +161,7 @@ class Labelfile(object):
         self.height = info['height']
         self.labelproject = info['labelproject']
         self.label_classes = label_classes
-        self.url = Util().url
+        self.url = url if url else Util().url
         self.user = user
         self.user_token = self.user.token
 
@@ -262,7 +262,7 @@ class Labelfile(object):
                           params={"token": self.user_token},
                           data={"sthreefilesId": [str(self.id)]})
 
-class Label(object):
+class Label(object, url=None):
     def __init__(self, info, user):
         if not isinstance(info, dict):
             raise Exception(str(info))
@@ -271,7 +271,7 @@ class Label(object):
         self.__dict__.update(info)
         self.id = info['id']
         self.labeltype = info['labeltype']
-        self.url = Util().url
+        self.url = url if url else Util().url
         self.user = user
         self.user_token = self.user.token
 
@@ -283,7 +283,7 @@ class Label(object):
 
 
 class Labelclass(object):
-    def __init__(self, info, user):
+    def __init__(self, info, user, url=None):
         if not isinstance(info, dict):
             raise Exception(str(info))
         if info.get('error'):
@@ -291,7 +291,7 @@ class Labelclass(object):
         self.__dict__.update(info)
         self.id = info['id']
         self.labelproject = info['labelproject']
-        self.url = Util().url
+        self.url = url if url else Util().url
         self.user = user
         self.name = info['name']
         self.user_token = self.user.token
@@ -305,7 +305,7 @@ class Labelclass(object):
                             data=json.dumps({
                                 'name': name,
                                 'color': color,
-                            })).json(), self.user)
+                            })).json(), self.user, url=self.url)
 
     def delete(self):
         req.delete(f"{self.url}/labelclasses/{self.id}/",params={"token": self.user_token})

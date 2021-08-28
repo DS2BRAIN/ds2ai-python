@@ -81,14 +81,14 @@ class Util():
             return req.post(target_url, data=json.dumps(request_data))
 
 class Asynctask(object):
-    def __init__(self, info, user):
+    def __init__(self, info, user, url=None):
         if not isinstance(info, dict):
             raise Exception(str(info))
         if info.get('error'):
             raise Exception(info['message_en'])
         self.__dict__.update(info)
         self.id = info['id']
-        self.url = Util().url
+        self.url = url if url else Util().url
         self.user = user
         self.user_token = self.user.token
 
@@ -97,13 +97,13 @@ class Asynctask(object):
 
     def refresh(self):
         return Asynctask(req.get(f"{self.url}/asynctasks/{self.id}/",
-                                 params={"token": self.user_token}).json(), self.user)
+                                 params={"token": self.user_token}).json(), self.user, url=self.url)
 
 
 class MarketModel(object):
     utilClass = Util()
 
-    def __init__(self, info, user):
+    def __init__(self, info, user, url=None):
         if not isinstance(info, dict):
             raise Exception(str(info))
         if info.get('error'):
@@ -111,7 +111,7 @@ class MarketModel(object):
         self.__dict__.update(info)
         self.id = info['id']
         self.name = info['name_en']
-        self.url = self.utilClass.url
+        self.url = url if url else Util().url
         self.user = user
         self.user_token = self.user.token
 
@@ -126,14 +126,14 @@ class MarketModel(object):
         }
 
         predict_url = {
-            "predict": f"{self.url}/predict/market/",
-            "predictimagebyurl": f"{self.url}/predictimagebyurl/market/",
-            "predictimagebyurlxai": f"{self.url}/predictimagebyurlxai/market/",
-            "predictimagebyurlinfo": f"{self.url}/predictimagebyurlinfo/market/",
-            "predictall": f"{self.url}/predictall/market/",
-            "predictimage": f"{self.url}/predictimage/market/",
-            "predictimagexai": f"{self.url}/predictimagexai/market/",
-            "predictimageinfo": f"{self.url}/predictimageinfo/market/",
+            "predict": f"{self.url}/market/predict/",
+            "predictimagebyurl": f"{self.url}/market/predictimagebyurl/",
+            "predictimagebyurlxai": f"{self.url}/market/predictimagebyurlxai/",
+            "predictimagebyurlinfo": f"{self.url}/market/predictimagebyurlinfo/",
+            "predictall": f"{self.url}/market/predictall/",
+            "predictimage": f"{self.url}/market/predictimage/",
+            "predictimagexai": f"{self.url}/market/predictimagexai/",
+            "predictimageinfo": f"{self.url}/market/predictimageinfo/",
         }
 
         return self.utilClass.predict(request_data, predict_url, data, return_type=return_type)
