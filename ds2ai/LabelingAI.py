@@ -262,8 +262,8 @@ class Labelfile(object):
                           params={"token": self.user_token},
                           data={"sthreefilesId": [str(self.id)]})
 
-class Label(object, url=None):
-    def __init__(self, info, user):
+class Label(object):
+    def __init__(self, info, user, url=None):
         if not isinstance(info, dict):
             raise Exception(str(info))
         if info.get('error'):
