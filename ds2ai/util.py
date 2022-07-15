@@ -2,7 +2,7 @@ import json
 import requests as req
 
 class Util():
-    url = "http://0.0.0.0"
+    url = "https://api.ds2.ai"
 
     def predict(self, request_data, predict_url, data, return_type="info"):
 
