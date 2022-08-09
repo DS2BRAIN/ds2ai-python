@@ -21,7 +21,7 @@ class Dataconnector(object):
         return f"{str(self.id)}: {str(self.name)}"
 
     def delete(self):
-        req.delete(f"{self.url}/dataconnectors/{self.id}/",params={"token": self.user_token})
+        req.delete(f"{self.url}/dataconnector/{self.id}/",params={"token": self.user_token})
 
     def get_magic_code(self, training_method, value_for_predict, file_path="output.ipynb"):
 

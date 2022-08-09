@@ -36,7 +36,7 @@ class Project(object):
         return str(self.id)
 
     def get_dataconnector(self, dataconnector_id):
-        return Dataconnector(req.get(f"{self.url}/dataconnectors/{dataconnector_id}/",
+        return Dataconnector(req.get(f"{self.url}/dataconnector/{dataconnector_id}/",
                                      params={"token": self.user_token}).json(), self.user, url=self.url)
 
     def refresh(self):
@@ -120,7 +120,7 @@ class Model(object):
         return Project(req.get(f"{self.url}/projects/{project_id}/", params={"token": self.user_token}).json(), self.user, url=self.url)
 
     def get_dataconnector(self, dataconnector_id):
-        return Dataconnector(req.get(f"{self.url}/dataconnectors/{dataconnector_id}/",
+        return Dataconnector(req.get(f"{self.url}/dataconnector/{dataconnector_id}/",
                                      params={"token": self.user_token}).json(), self.user, url=self.url)
 
     def predict(self, data, return_type="info"):

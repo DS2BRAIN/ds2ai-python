@@ -93,7 +93,7 @@ class DS2():
     def create_dataconnector(self, data_file, has_label_data=False, predict_column_name=None, frame=60):
         with open(data_file, "rb") as f:
             file_content = f.read()
-            return Dataconnector(req.post(f"{self.url}/dataconnectorswithfile/",
+            return Dataconnector(req.post(f"{self.url}/dataconnectorwithfile/",
                                     files={'file': file_content},
                                     data={'token': self.user_token,
                                           'filename': data_file.split("/")[-1] if "/" in data_file else data_file,
@@ -105,14 +105,14 @@ class DS2():
 
     def get_dataconnectors(self, count=25, start=1, desc=True):
         items = []
-        items_raw = req.get(f"{self.url}/dataconnectors/",
+        items_raw = req.get(f"{self.url}/dataconnector/",
                 params={"token": self.user_token, "start": start, "page": count, "desc": desc}).json()['dataconnectors']
         for item_raw in items_raw:
             items.append(Dataconnector(item_raw, self.user, url=self.url))
         return items
 
     def get_dataconnector(self, dataconnector_id):
-        return Dataconnector(req.get(f"{self.url}/dataconnectors/{dataconnector_id}/",
+        return Dataconnector(req.get(f"{self.url}/dataconnector/{dataconnector_id}/",
                                      params={"token": self.user_token}).json(), self.user, url=self.url)
 
     def create_labelproject(self, data_file=None, dataconnector=None, dataconnectors=None,

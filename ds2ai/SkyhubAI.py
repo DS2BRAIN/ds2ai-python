@@ -88,7 +88,7 @@ class Opsproject(object):
         return self.utilClass.predict(request_data, predict_url, data, return_type=return_type)
 
     def get_dataconnector(self, dataconnector_id):
-        return Dataconnector(req.get(f"{self.url}/dataconnectors/{dataconnector_id}/",
+        return Dataconnector(req.get(f"{self.url}/dataconnector/{dataconnector_id}/",
                                      params={"token": self.user_token}).json(), self.user, url=self.url)
 
 class Opsmodel(object):
