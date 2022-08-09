@@ -93,7 +93,7 @@ class DS2():
     def create_dataconnector(self, data_file, has_label_data=False, predict_column_name=None, frame=60):
         with open(data_file, "rb") as f:
             file_content = f.read()
-            return Dataconnector(req.post(f"{self.url}/dataconnectorwithfile/",
+            return Dataconnector(req.post(f"{self.url}/dataconnectorswithfile/",
                                     files={'file': file_content},
                                     data={'token': self.user_token,
                                           'filename': data_file.split("/")[-1] if "/" in data_file else data_file,
