@@ -251,7 +251,8 @@ class DS2():
                                       })).json(), self.user, url=self.url)
 
 
-    def train(self, data_file, training_method, value_for_predict, option="accuracy", frame=60):
+    def train(self, data_file, training_method, value_for_predict, option="accuracy", frame=60,
+              hyper_params={}, algorithm=None, **kwargs):
 
         dataconnector = self.create_dataconnector(data_file, has_label_data=True, predict_column_name=value_for_predict)
         print("The data is being processed now. It will take a while. (Mostly less than 5 minutes.)")
@@ -265,16 +266,19 @@ class DS2():
 
         if not is_uploaded:
             raise ("The training data is being processed now. Please retry with ds2.train() when the data is ready. When it is ready, dataconnector.status will return 100.")
-
+        data = {
+              'trainingMethod': training_method,
+              'valueForPredict': value_for_predict,
+              'dataconnector': dataconnector.id,
+              'option': option,
+              'frameValue': frame,
+              'hyper_params': hyper_params,
+              'algorithm': algorithm,
+              }
+        data.update(kwargs)
         return Project(req.post(f"{self.url}/train-from-data/",
                             params={"token": self.user_token},
-                            data=json.dumps({
-                                  'trainingMethod': training_method,
-                                  'valueForPredict': value_for_predict,
-                                  'dataconnector': dataconnector.id,
-                                  'option': option,
-                                  'frameValue': frame,
-                                  })).json(), self.user, url=self.url)
+                            data=json.dumps(data)).json(), self.user, url=self.url)
 
     def deploy(self, model_file, name=None, cloud_type="AWS", region="us-west-1", server_type="g4dn.xlarge"):
 
