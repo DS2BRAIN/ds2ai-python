@@ -46,18 +46,22 @@ class Project(object):
     def delete(self):
         req.delete(f"{self.url}/projects/{self.id}/",params={"token": self.user_token})
 
-    def train(self, training_method, value_for_predict, option="speed"):
+    def train(self, training_method, value_for_predict, option="speed", algorithm=None, hyper_params={}, **kwargs):
 
         if self.status != 0:
             raise("The training is already started.")
+        data = {
+            'trainingMethod': training_method,
+            'valueForPredict': value_for_predict,
+            'algorithm': algorithm,
+            'hyper_params': hyper_params,
+            'option': option,
+        }
+        data.update(kwargs)
 
         return Project(req.post(f"{self.url}/train/{self.id}/",
                             params={"token": self.user_token},
-                            data=json.dumps({
-                                'trainingMethod': training_method,
-                                'valueForPredict': value_for_predict,
-                                'option': option,
-                            })).json(), self.user, url=self.url)
+                            data=json.dumps(data)).json(), self.user, url=self.url)
 
     def stop(self):
 
